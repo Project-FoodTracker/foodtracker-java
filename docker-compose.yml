@@ -1,0 +1,14 @@
+version: '2.2'
+services:
+  foodtracker-backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: foodtracker-backend
+    ports:
+      - 8080
+    networks:
+      - network1
+ 
+networks:
+  network1:

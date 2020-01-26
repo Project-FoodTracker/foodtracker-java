@@ -7,7 +7,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.0.RELEASE</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <groupId>at.ac.fernfh.foodtracker</groupId>
@@ -48,6 +48,29 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <repository>lwallenboeck/foodtracker-backend</repository>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
