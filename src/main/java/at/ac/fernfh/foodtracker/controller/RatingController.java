@@ -34,10 +34,22 @@ public class RatingController {
 
     @GetMapping("/ratings/{id}")
     public ResponseEntity<Rating> getRatingById(@PathVariable(value = "id") final Long ratingId) throws ResourceNotFoundException {
-        LOG.info("Retrieving rating by id ::" + ratingId);
+        LOG.info("Retrieving rating by id :: " + ratingId);
         final Rating rating = ratingRepository.findById(ratingId).orElseThrow(
                 () -> new ResourceNotFoundException("Rating not found for this id :: " + ratingId));
         return ResponseEntity.ok().body(rating);
+    }
+
+    @GetMapping("/ratings/user/{id}")
+    public List<Rating> getRatingByUser(@PathVariable(value = "id") final Long userId) {
+        LOG.info("Retrieving ratings by user :: " + userId);
+        return ratingRepository.getRatingsByUser(userId);
+    }
+
+    @GetMapping("/ratings/restaurant/{id}")
+    public List<Rating> getRatingByRestaurant(@PathVariable(value = "id") final Long restaurantId) {
+        LOG.info("Retrieving ratings by user :: " + restaurantId);
+        return ratingRepository.getRatingsByRestaurant(restaurantId);
     }
 
     @PostMapping("/ratings")

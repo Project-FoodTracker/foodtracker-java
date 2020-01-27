@@ -16,8 +16,8 @@ public class Rating {
     @Id
     private Long id;
 
-    private User user;
-    private Restaurant restaurant;
+    private Long user;
+    private Long restaurant;
     private String dish;
     private String comment;
     private Date date;
@@ -35,8 +35,8 @@ public class Rating {
      * @param rating     rating itself
      * @param images     images of the dish
      */
-    public Rating(final User user, final Restaurant restaurant, final String dish, final String comment, final Date date,
-                  final double rating, final List<Image> images) {
+    public Rating(final Long user, final Long restaurant, final String dish, final String comment, final Date date, final double rating,
+                  final List<Image> images) {
         this.user = user;
         this.restaurant = restaurant;
         this.dish = dish;
@@ -54,19 +54,19 @@ public class Rating {
         this.id = id;
     }
 
-    public User getUser() {
+    public Long getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(Long user) {
         this.user = user;
     }
 
-    public Restaurant getRestaurant() {
+    public Long getRestaurant() {
         return restaurant;
     }
 
-    public void setRestaurant(Restaurant restaurant) {
+    public void setRestaurant(Long restaurant) {
         this.restaurant = restaurant;
     }
 

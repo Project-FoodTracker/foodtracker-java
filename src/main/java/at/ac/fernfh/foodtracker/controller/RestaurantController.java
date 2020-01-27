@@ -35,10 +35,16 @@ public class RestaurantController {
     @GetMapping("/restaurants/{id}")
     public ResponseEntity<Restaurant> getRestaurantById(@PathVariable(value = "id") final Long restaurantId)
     throws ResourceNotFoundException {
-        LOG.info("Retrieving restaurant by id ::" + restaurantId);
+        LOG.info("Retrieving restaurant by id :: " + restaurantId);
         final Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
                 () -> new ResourceNotFoundException("Restaurant not found for this id :: " + restaurantId));
         return ResponseEntity.ok().body(restaurant);
+    }
+
+    @GetMapping("/restaurants/postalCode/{id}")
+    public List<Restaurant> getRestaurantsById(@PathVariable(value = "id") final String postalCode) {
+        LOG.info("Retrieving restaurants by postal code :: " + postalCode);
+        return restaurantRepository.getRestaurantsByPostalCode(postalCode);
     }
 
     @PostMapping("/restaurants")
