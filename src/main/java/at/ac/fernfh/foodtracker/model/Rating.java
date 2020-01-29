@@ -1,7 +1,6 @@
 package at.ac.fernfh.foodtracker.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
@@ -10,14 +9,11 @@ import java.util.List;
 @Document(collection = "Rating")
 public class Rating {
 
-    @Transient
-    public static final String SEQUENCE_NAME = "rating_sequence";
-
     @Id
-    private Long id;
+    private String id;
 
-    private Long user;
-    private Long restaurant;
+    private String user;
+    private String restaurant;
     private String dish;
     private String comment;
     private Date date;
@@ -27,15 +23,15 @@ public class Rating {
     /**
      * Constructor
      *
-     * @param user       user of the rating
-     * @param restaurant restaurant of the rating
+     * @param user       userId of the rating
+     * @param restaurant restaurantId of the rating
      * @param dish       name of the dish
      * @param comment    additional comment
      * @param date       date and time of the rating
      * @param rating     rating itself
      * @param images     images of the dish
      */
-    public Rating(final Long user, final Long restaurant, final String dish, final String comment, final Date date, final double rating,
+    public Rating(final String user, final String restaurant, final String dish, final String comment, final Date date, final double rating,
                   final List<Image> images) {
         this.user = user;
         this.restaurant = restaurant;
@@ -46,27 +42,27 @@ public class Rating {
         this.images = images;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Long getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(Long user) {
+    public void setUser(String user) {
         this.user = user;
     }
 
-    public Long getRestaurant() {
+    public String getRestaurant() {
         return restaurant;
     }
 
-    public void setRestaurant(Long restaurant) {
+    public void setRestaurant(String restaurant) {
         this.restaurant = restaurant;
     }
 

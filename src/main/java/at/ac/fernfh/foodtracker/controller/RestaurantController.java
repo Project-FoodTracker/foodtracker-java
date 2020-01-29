@@ -3,7 +3,6 @@ package at.ac.fernfh.foodtracker.controller;
 import at.ac.fernfh.foodtracker.exception.ResourceNotFoundException;
 import at.ac.fernfh.foodtracker.model.Restaurant;
 import at.ac.fernfh.foodtracker.repository.RestaurantRepository;
-import at.ac.fernfh.foodtracker.service.SequenceGeneratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ public class RestaurantController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SequenceGeneratorService sequenceGeneratorService;
-    @Autowired
     private RestaurantRepository restaurantRepository;
 
     @GetMapping("/restaurants")
@@ -33,7 +30,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/restaurants/{id}")
-    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable(value = "id") final Long restaurantId)
+    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable(value = "id") final String restaurantId)
     throws ResourceNotFoundException {
         LOG.info("Retrieving restaurant by id :: " + restaurantId);
         final Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
@@ -50,12 +47,11 @@ public class RestaurantController {
     @PostMapping("/restaurants")
     public Restaurant createRestaurant(@Valid @RequestBody final Restaurant restaurant) {
         LOG.info("Creating restaurant :: " + restaurant);
-        restaurant.setId(sequenceGeneratorService.generateSequence(Restaurant.SEQUENCE_NAME));
         return restaurantRepository.save(restaurant);
     }
 
     @PutMapping("/restaurants/{id}")
-    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable(value = "id") final Long restaurantId,
+    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable(value = "id") final String restaurantId,
                                                        @Valid @RequestBody final Restaurant restaurantDetails)
     throws ResourceNotFoundException {
         LOG.info("Updating restaurant :: " + restaurantDetails);
@@ -68,7 +64,7 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/restaurants/{id}")
-    public Map<String, Boolean> deleteRestaurant(@PathVariable(value = "id") final Long restaurantId) throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteRestaurant(@PathVariable(value = "id") final String restaurantId) throws ResourceNotFoundException {
         LOG.info("Deleting restaurant :: " + restaurantId);
         final Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
                 () -> new ResourceNotFoundException("Restaurant not found for this id :: " + restaurantId));

@@ -7,9 +7,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RatingRepository extends MongoRepository<Rating, Long> {
+public interface RatingRepository extends MongoRepository<Rating, String> {
 
-    List<Rating> getRatingsByUser(final Long userId);
+    List<Rating> getRatingsByUser(final String userId);
 
-    List<Rating> getRatingsByRestaurant(final Long restaurantId);
+    List<Rating> getRatingsByRestaurant(final String restaurantId);
+
+    List<Rating> getRatingsByUserAndRestaurant(final String userId, final String restaurantId);
 }

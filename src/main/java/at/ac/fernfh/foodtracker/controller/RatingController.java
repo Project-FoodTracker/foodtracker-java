@@ -3,7 +3,6 @@ package at.ac.fernfh.foodtracker.controller;
 import at.ac.fernfh.foodtracker.exception.ResourceNotFoundException;
 import at.ac.fernfh.foodtracker.model.Rating;
 import at.ac.fernfh.foodtracker.repository.RatingRepository;
-import at.ac.fernfh.foodtracker.service.SequenceGeneratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ public class RatingController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SequenceGeneratorService sequenceGeneratorService;
-    @Autowired
     private RatingRepository ratingRepository;
 
     @GetMapping("/ratings")
@@ -33,7 +30,7 @@ public class RatingController {
     }
 
     @GetMapping("/ratings/{id}")
-    public ResponseEntity<Rating> getRatingById(@PathVariable(value = "id") final Long ratingId) throws ResourceNotFoundException {
+    public ResponseEntity<Rating> getRatingById(@PathVariable(value = "id") final String ratingId) throws ResourceNotFoundException {
         LOG.info("Retrieving rating by id :: " + ratingId);
         final Rating rating = ratingRepository.findById(ratingId).orElseThrow(
                 () -> new ResourceNotFoundException("Rating not found for this id :: " + ratingId));
@@ -41,26 +38,44 @@ public class RatingController {
     }
 
     @GetMapping("/ratings/user/{id}")
-    public List<Rating> getRatingByUser(@PathVariable(value = "id") final Long userId) {
+    public List<Rating> getRatingByUser(@PathVariable(value = "id") final String userId) {
         LOG.info("Retrieving ratings by user :: " + userId);
         return ratingRepository.getRatingsByUser(userId);
     }
 
     @GetMapping("/ratings/restaurant/{id}")
-    public List<Rating> getRatingByRestaurant(@PathVariable(value = "id") final Long restaurantId) {
-        LOG.info("Retrieving ratings by user :: " + restaurantId);
+    public List<Rating> getRatingByRestaurant(@PathVariable(value = "id") final String restaurantId) {
+        LOG.info("Retrieving ratings by restaurant :: " + restaurantId);
         return ratingRepository.getRatingsByRestaurant(restaurantId);
+    }
+
+    @GetMapping("/ratings/avg/{id}")
+    public ResponseEntity<Double> getAverageRatingByRestaurant(@PathVariable(value = "id") final String restaurantId) {
+        LOG.info("Retrieving average rating of restaurant :: " + restaurantId);
+        final List<Rating> ratings = ratingRepository.getRatingsByRestaurant(restaurantId);
+        double avgRating = 0.0;
+        for (Rating rating : ratings) {
+            avgRating += rating.getRating();
+        }
+        avgRating /= ratings.size();
+        return ResponseEntity.ok().body(avgRating);
+    }
+
+    @GetMapping("/ratings/{id}/{id2}")
+    public List<Rating> getRatingByUserAndRestaurant(@PathVariable(value = "id") final String userId,
+                                                     @PathVariable(value = "id2") final String restaurantId) {
+        LOG.info("Retrieving ratings by user :: " + userId + " and restaurant :: " + restaurantId);
+        return ratingRepository.getRatingsByUserAndRestaurant(userId, restaurantId);
     }
 
     @PostMapping("/ratings")
     public Rating createRating(@Valid @RequestBody final Rating rating) {
         LOG.info("Creating rating :: " + rating);
-        rating.setId(sequenceGeneratorService.generateSequence(Rating.SEQUENCE_NAME));
         return ratingRepository.save(rating);
     }
 
     @PutMapping("/ratings/{id}")
-    public ResponseEntity<Rating> updateRating(@PathVariable(value = "id") final Long ratingId,
+    public ResponseEntity<Rating> updateRating(@PathVariable(value = "id") final String ratingId,
                                                @Valid @RequestBody final Rating ratingDetails) throws ResourceNotFoundException {
         LOG.info("Updating rating :: " + ratingDetails);
         final Rating rating = ratingRepository.findById(ratingId).orElseThrow(
@@ -72,7 +87,7 @@ public class RatingController {
     }
 
     @DeleteMapping("/ratings/{id}")
-    public Map<String, Boolean> deleteRating(@PathVariable(value = "id") final Long ratingId) throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteRating(@PathVariable(value = "id") final String ratingId) throws ResourceNotFoundException {
         LOG.info("Deleting rating :: " + ratingId);
         final Rating rating = ratingRepository.findById(ratingId).orElseThrow(
                 () -> new ResourceNotFoundException("Rating not found for this id :: " + ratingId));

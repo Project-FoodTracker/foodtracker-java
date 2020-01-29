@@ -1,17 +1,13 @@
 package at.ac.fernfh.foodtracker.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "User")
 public class User {
 
-    @Transient
-    public static final String SEQUENCE_NAME = "user_sequence";
-
     @Id
-    private Long id;
+    private String id;
 
     private String lastName;
     private String firstName;
@@ -22,15 +18,16 @@ public class User {
 
     /**
      * Constructor
-     * @param lastName last name of the user
-     * @param firstName first name of the user
-     * @param username username of the user
-     * @param password password of the user
+     *
+     * @param lastName      last name of the user
+     * @param firstName     first name of the user
+     * @param username      username of the user
+     * @param password      password of the user
      * @param oAuthProvider oauth provider
-     * @param oAuthUid oauth uid
+     * @param oAuthUid      oauth uid
      */
-    public User(final String lastName, final String firstName, final String username, final String password,
-                final String oAuthProvider, final String oAuthUid) {
+    public User(final String lastName, final String firstName, final String username, final String password, final String oAuthProvider,
+                final String oAuthUid) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.username = username;
@@ -39,11 +36,11 @@ public class User {
         this.oAuthUid = oAuthUid;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -97,14 +94,8 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", oAuthProvider='" + oAuthProvider + '\'' +
-                ", oAuthUid='" + oAuthUid + '\'' +
+        return "User{" + "id=" + id + ", lastName='" + lastName + '\'' + ", firstName='" + firstName + '\'' + ", username='" + username +
+                '\'' + ", password='" + password + '\'' + ", oAuthProvider='" + oAuthProvider + '\'' + ", oAuthUid='" + oAuthUid + '\'' +
                 '}';
     }
 }
