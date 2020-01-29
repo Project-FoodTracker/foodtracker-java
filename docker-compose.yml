@@ -1,14 +1,21 @@
-version: '3'
+version: '3.7'
 services:
-    database:
-      image: 'mongo'
-      container_name: 'foodtracker_mongo'
-      environment:
-        - MONGO_INITDB_DATABASE= foodtracker_dev_environment
-        - MONGO_INITDB_ROOT_USERNAME= testuser
-        - MONGO_INTIDB_ROOT_PASSWD= test
-      volumes_from:
-        - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
-        - ./mongo-volume:/data/db
-      ports:
-        - '27017-27019:27017-27019'
+  foodtracker-mongodb:
+    image: mongo:latest
+    restart: always
+    environment:
+      - MONGO_DATA_DIR=/data/db
+      - MONGO_LOG_DIR=/dev/null
+    expose:
+      - 27017
+
+  foodtracker-backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: foodtracker-backend
+    ports:
+      - 8080:8080
+    command: mvn clean spring-boot:run
+    depends_on:
+      - foodtracker-mongodb

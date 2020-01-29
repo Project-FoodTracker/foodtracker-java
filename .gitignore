@@ -166,3 +166,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/java,react,windows,intellij
+/.idea/checkstyle-idea.xml
+/.idea/foodtracker-java.iml
