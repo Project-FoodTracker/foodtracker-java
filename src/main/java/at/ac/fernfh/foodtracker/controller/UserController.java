@@ -3,7 +3,6 @@ package at.ac.fernfh.foodtracker.controller;
 import at.ac.fernfh.foodtracker.exception.ResourceNotFoundException;
 import at.ac.fernfh.foodtracker.model.User;
 import at.ac.fernfh.foodtracker.repository.UserRepository;
-import at.ac.fernfh.foodtracker.service.SequenceGeneratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +21,6 @@ public class UserController {
     private final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private SequenceGeneratorService sequenceGeneratorService;
-    @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/users")
@@ -33,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable(value = "id") final Long userId) throws ResourceNotFoundException {
+    public ResponseEntity<User> getUserById(@PathVariable(value = "id") final String userId) throws ResourceNotFoundException {
         LOG.info("Retrieving user by id ::" + userId);
         final User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("User not found for this id :: " + userId));
@@ -43,12 +40,11 @@ public class UserController {
     @PostMapping("/users")
     public User createUser(@Valid @RequestBody final User user) {
         LOG.info("Creating user :: " + user);
-        user.setId(sequenceGeneratorService.generateSequence(User.SEQUENCE_NAME));
         return userRepository.save(user);
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable(value = "id") final Long userId, @Valid @RequestBody final User userDetails)
+    public ResponseEntity<User> updateUser(@PathVariable(value = "id") final String userId, @Valid @RequestBody final User userDetails)
     throws ResourceNotFoundException {
         LOG.info("Updating user :: " + userDetails);
         final User user = userRepository.findById(userId).orElseThrow(
@@ -60,7 +56,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") final Long userId) throws ResourceNotFoundException {
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") final String userId) throws ResourceNotFoundException {
         LOG.info("Deleting user :: " + userId);
         final User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("User not found for this id :: " + userId));
