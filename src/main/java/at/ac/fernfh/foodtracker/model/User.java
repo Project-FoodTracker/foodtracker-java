@@ -1,6 +1,5 @@
 package at.ac.fernfh.foodtracker.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,7 +12,6 @@ public class User {
     private String lastName;
     private String firstName;
     private String username;
-    @JsonIgnore
     private String password;
 
     /**
