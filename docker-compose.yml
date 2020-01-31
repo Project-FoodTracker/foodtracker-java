@@ -6,7 +6,7 @@ services:
     environment:
       - MONGO_DATA_DIR=/data/db
       - MONGO_LOG_DIR=/dev/null
-    expose:
+    ports:
       - 27017
 
   foodtracker-backend:

@@ -13,27 +13,24 @@ public class User {
     private String firstName;
     private String username;
     private String password;
-    private String oAuthProvider;
-    private String oAuthUid;
 
     /**
      * Constructor
      *
-     * @param lastName      last name of the user
-     * @param firstName     first name of the user
-     * @param username      username of the user
-     * @param password      password of the user
-     * @param oAuthProvider oauth provider
-     * @param oAuthUid      oauth uid
+     * @param lastName  last name of the user
+     * @param firstName first name of the user
+     * @param username  username of the user
+     * @param password  password of the user
      */
-    public User(final String lastName, final String firstName, final String username, final String password, final String oAuthProvider,
-                final String oAuthUid) {
+    public User(final String lastName, final String firstName, final String username, final String password) {
         this.lastName = lastName;
         this.firstName = firstName;
         this.username = username;
         this.password = password;
-        this.oAuthProvider = oAuthProvider;
-        this.oAuthUid = oAuthUid;
+    }
+
+    public User() {
+
     }
 
     public String getId() {
@@ -76,26 +73,9 @@ public class User {
         this.password = password;
     }
 
-    public String getoAuthProvider() {
-        return oAuthProvider;
-    }
-
-    public void setoAuthProvider(String oAuthProvider) {
-        this.oAuthProvider = oAuthProvider;
-    }
-
-    public String getoAuthUid() {
-        return oAuthUid;
-    }
-
-    public void setoAuthUid(String oAuthUid) {
-        this.oAuthUid = oAuthUid;
-    }
-
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", lastName='" + lastName + '\'' + ", firstName='" + firstName + '\'' + ", username='" + username +
-                '\'' + ", password='" + password + '\'' + ", oAuthProvider='" + oAuthProvider + '\'' + ", oAuthUid='" + oAuthUid + '\'' +
-                '}';
+                '\'' + '}';
     }
 }

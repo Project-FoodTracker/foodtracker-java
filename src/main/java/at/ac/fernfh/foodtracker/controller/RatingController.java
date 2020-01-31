@@ -7,7 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -81,7 +88,13 @@ public class RatingController {
         final Rating rating = ratingRepository.findById(ratingId).orElseThrow(
                 () -> new ResourceNotFoundException("Rating not found for this id :: " + ratingId));
 
+        rating.setRestaurant(ratingDetails.getRestaurant());
+        rating.setUser(ratingDetails.getUser());
+        rating.setDate(ratingDetails.getDate());
+        rating.setDish(ratingDetails.getDish());
+        rating.setRating(ratingDetails.getRating());
         rating.setComment(ratingDetails.getComment());
+        rating.setImages(ratingDetails.getImages());
         final Rating updatedRating = ratingRepository.save(rating);
         return ResponseEntity.ok(updatedRating);
     }
