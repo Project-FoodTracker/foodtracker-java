@@ -33,7 +33,7 @@ public class JwtAuthenticationController {
     @PostMapping(value = "/register")
     public ResponseEntity<User> saveUser(@RequestBody User user) {
 
-        if (userRepository.findUserByUsername(user.getUsername()) != null) {
+        if (userRepository.findUserByUsername(user.getUsername()) == null) {
             return ResponseEntity.ok(userDetailsService.saveAndEncodePassword(user));
         } else {
             return ResponseEntity.badRequest().body(user);
