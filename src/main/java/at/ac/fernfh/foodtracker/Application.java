@@ -48,7 +48,7 @@ public class Application implements CommandLineRunner {
         openingHours.put("Mittwoch", new OpeningHours(new Date(), new Date()));
         openingHours.put("Sonntag", null);
         final List<Image> images = new ArrayList<>();
-        images.add(new Image("image1.png", "./images"));
+        images.add(new Image("200x150", "./"));
         final Restaurant res1 = new Restaurant("McDonalds", "McStreet", "1", "3100", "Österreich", 47.0631116f, 15.4341873f,
                                                "I'm loving it", openingHours, PriceClass.ONE, images);
         final Restaurant res2 = new Restaurant("PeterPan", "Teststraße", "2", "3100", "Österreich", 47.03f, 15.41f, "", openingHours,
