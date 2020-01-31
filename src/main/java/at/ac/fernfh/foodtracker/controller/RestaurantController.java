@@ -7,7 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -31,7 +38,7 @@ public class RestaurantController {
 
     @GetMapping("/restaurants/{id}")
     public ResponseEntity<Restaurant> getRestaurantById(@PathVariable(value = "id") final String restaurantId)
-    throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
         LOG.info("Retrieving restaurant by id :: " + restaurantId);
         final Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
                 () -> new ResourceNotFoundException("Restaurant not found for this id :: " + restaurantId));
@@ -53,11 +60,21 @@ public class RestaurantController {
     @PutMapping("/restaurants/{id}")
     public ResponseEntity<Restaurant> updateRestaurant(@PathVariable(value = "id") final String restaurantId,
                                                        @Valid @RequestBody final Restaurant restaurantDetails)
-    throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
         LOG.info("Updating restaurant :: " + restaurantDetails);
         final Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
                 () -> new ResourceNotFoundException("Restaurant not found for this id :: " + restaurantId));
 
+        restaurant.setCountry(restaurantDetails.getCountry());
+        restaurant.setImages(restaurantDetails.getImages());
+        restaurant.setLatitude(restaurantDetails.getLatitude());
+        restaurant.setLongitude(restaurantDetails.getLongitude());
+        restaurant.setName(restaurantDetails.getName());
+        restaurant.setNumber(restaurantDetails.getNumber());
+        restaurant.setOpeningHours(restaurantDetails.getOpeningHours());
+        restaurant.setPostalCode(restaurantDetails.getPostalCode());
+        restaurant.setStreet(restaurantDetails.getStreet());
+        restaurant.setPriceClass(restaurantDetails.getPriceClass());
         restaurant.setDescription(restaurantDetails.getDescription());
         final Restaurant updatedRestaurant = restaurantRepository.save(restaurant);
         return ResponseEntity.ok(updatedRestaurant);

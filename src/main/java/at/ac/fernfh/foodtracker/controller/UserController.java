@@ -3,11 +3,19 @@ package at.ac.fernfh.foodtracker.controller;
 import at.ac.fernfh.foodtracker.exception.ResourceNotFoundException;
 import at.ac.fernfh.foodtracker.model.User;
 import at.ac.fernfh.foodtracker.repository.UserRepository;
+import at.ac.fernfh.foodtracker.service.UserDetailsServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -22,6 +30,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
@@ -45,13 +56,16 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") final String userId, @Valid @RequestBody final User userDetails)
-    throws ResourceNotFoundException {
+            throws ResourceNotFoundException {
         LOG.info("Updating user :: " + userDetails);
         final User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("User not found for this id :: " + userId));
 
+        user.setUsername(userDetails.getUsername());
+        user.setPassword(userDetails.getPassword());
         user.setFirstName(userDetails.getFirstName());
-        final User updatedUser = userRepository.save(user);
+        user.setLastName(userDetails.getLastName());
+        final User updatedUser = userDetailsService.saveAndEncodePassword(user);
         return ResponseEntity.ok(updatedUser);
     }
 
