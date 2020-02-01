@@ -6,8 +6,9 @@ If you click one Restaurant a pop-up with all meals you had there will appear.
 
 
 ## Start foodtracker
-### Install Docker and run 
-docker-compose up
+### Install Docker and run foodtracker
+Move to the project directory (/) and run
 
-in the src/ directory 
+### `docker-compose up`
 
+Everything will be build in a Docker container and the Application will run on localhost:3000
