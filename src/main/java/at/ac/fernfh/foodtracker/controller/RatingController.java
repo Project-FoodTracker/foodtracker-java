@@ -3,10 +3,13 @@ package at.ac.fernfh.foodtracker.controller;
 import at.ac.fernfh.foodtracker.exception.ResourceNotFoundException;
 import at.ac.fernfh.foodtracker.model.Rating;
 import at.ac.fernfh.foodtracker.repository.RatingRepository;
+import at.ac.fernfh.foodtracker.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +33,8 @@ public class RatingController {
 
     @Autowired
     private RatingRepository ratingRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/ratings")
     public List<Rating> getAllRatings() {
@@ -80,6 +85,8 @@ public class RatingController {
     public Rating createRating(@Valid @RequestBody final Rating rating) {
         LOG.info("Creating rating :: " + rating);
         rating.setDate(new Date());
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        rating.setUser(userRepository.findUserByUsername(user.getUsername()).getId());
         return ratingRepository.save(rating);
     }
 
